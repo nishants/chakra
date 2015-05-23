@@ -25,12 +25,12 @@ public class HomeControllerTest {
 
   @Before
   public void setUp() throws Exception {
-    mvc = MockMvcBuilders.standaloneSetup(new HomeController()).build();
+    mvc = MockMvcBuilders.standaloneSetup(new ProblemsController()).build();
   }
 
   @Test
   public void getHello() throws Exception {
-    mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
+    mvc.perform(MockMvcRequestBuilders.get("/problems/1").accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(equalTo("hi ! i am chakra-compiler-server")));
   }

@@ -14,8 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URL;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -28,18 +26,22 @@ public class HomePageTest {
   @Value("${local.server.port}")
   private int port;
 
-  private URL base;
+  private String base;
   private RestTemplate template;
 
   @Before
   public void setUp() throws Exception {
-    this.base = new URL("http://localhost:" + port + "/");
+    this.base = "http://localhost:" + port + "/";
     template = new TestRestTemplate();
   }
 
   @Test
   public void shouldShowLoginPage(){
-    ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+    ResponseEntity<String> response = template.getForEntity(urlForProblemId(1), String.class);
     assertThat(response.getStatusCode(), is(HttpStatus.OK));
+  }
+
+  private String urlForProblemId(long problemId) {
+    return base +"problems/" + problemId ;
   }
 }
