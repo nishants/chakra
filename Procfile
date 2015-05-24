@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/chakra-0.1.0
+web: java -Dserver.port=$PORT -jar target/chakra-0.1.0.jar
