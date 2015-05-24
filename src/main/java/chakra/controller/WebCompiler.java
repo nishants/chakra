@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 
 @RestController
 public class WebCompiler {
-  @RequestMapping("/compile/hello-world")
+  @RequestMapping(value = "/compile/hello-world", method = POST)
   public String getProblem(@RequestBody String src) throws Exception {
     Class<?> compiledCode = InMemoryJavaCompiler.compile("HelloWorld", src);
     return invokeStatic(mainMethodFrom(compiledCode)) ;
