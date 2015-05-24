@@ -37,18 +37,27 @@ public class CompilationTest {
   @Test
   public void helloWorld(){
     ResponseEntity<String> response = template.postForEntity(
-        url("compiler"),
-        helloWorldRequest(),
+        url("compile/hello-world"),
+        print("Hello World!"),
         String.class
     );
+
     assertThat(response.getStatusCode(), is(HttpStatus.OK));
+    assertThat(response.getBody(), is("Hello World! - main"));
   }
 
-  private String helloWorldRequest() {
-    return "{content:{main: 'HelloWorldClass'}}";
+  private String compilationRequestFor(String mainClass) {
+    return "{content:{main: '<main-class-code>'}}".replace("<main-class-code>", mainClass);
   }
 
   private String url(String url) {
     return String.format("http://localhost:%d/%s/", port, url);
+  }
+
+  private String print(String message){
+    return String.format(
+        "class HelloWorld {public static void main(String[] hh){System.out.println(%s);}}",
+        ('"' + message + '"')
+    );
   }
 }
