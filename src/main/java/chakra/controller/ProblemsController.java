@@ -1,4 +1,4 @@
-package org.geeksaints.chakra.controller;
+package chakra.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

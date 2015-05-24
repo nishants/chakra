@@ -1,4 +1,4 @@
-package org.geeksaints.chakra.controller;
+package chakra.controller;
 
 import org.junit.Before;
 import org.junit.Test;

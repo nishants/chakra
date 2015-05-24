@@ -1,6 +1,6 @@
-package org.geeksaints.chakra.api;
+package chakra.spec;
 
-import org.geeksaints.chakra.Application;
+import chakra.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
