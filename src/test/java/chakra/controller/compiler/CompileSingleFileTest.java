@@ -28,13 +28,38 @@ public class CompileSingleFileTest {
       "       package chakra.compiler;  " +
           "       public class AClass {                " +
           "         public static String get(){               " +
-          "           return \"dynamically-loaded-static\";   " +
+          "           return \"static-a-class\";   " +
           "         }                                  " +
           "         public String getI(){\n"+
-          "           return \"dynamically-loaded-instance\";"+
+          "           return \"dynamic-a-class\";"+
           "         }                                         "+
 
   "       }                                    ";
+
+  private static final String aHelloClass =
+      "       package a.b;  " +
+          "       public class HelloClass  {                " +
+          "         public static String get(){               " +
+          "           return \"static-a-class\";   " +
+          "         }                                  " +
+          "         public String getI(){\n"+
+          "           return \"instance-a-class\";"+
+          "         }                                         "+
+
+  "       }                                    ";
+
+  private static final String anotherHelloClass =
+      "       package a.b;  " +
+          "       public class HelloClass  {                " +
+          "         public static String get(){               " +
+          "           return \"static-other-class\";   " +
+          "         }                                  " +
+          "         public String getI(){\n"+
+          "           return \"instance-other-class\";"+
+          "         }                                         "+
+
+  "       }                                    "
+      ;
 
 
   @Before
@@ -48,8 +73,8 @@ public class CompileSingleFileTest {
         .compile("chakra.compiler.AClass", aDynmaicClass)
         .getCompiledClass();
 
-    String gotDynamicallyStatic   = invokeStaticGetterOn(dynamicClass);
-    String gotDynamicallyInstance = invokeInstanceGetterOn(dynamicClass);
+    String gotDynamicallyStatic   = staticGetOn(dynamicClass);
+    String gotDynamicallyInstance = instanceGetOn(dynamicClass);
 
     assertThat(gotDynamicallyStatic, is("statically-loaded-static"));
     assertThat(gotDynamicallyInstance, is("statically-loaded-instance"));
@@ -72,6 +97,23 @@ public class CompileSingleFileTest {
 
   }
 
+  @Test
+  public void compilersMustHaveIsolatedClassLoaders() throws Exception {
+    Class aClass = compiler
+        .compile("a.b.HelloClass", aHelloClass)
+        .getCompiledClass();
+
+    Class anotherClass = compiler
+        .compile("a.b.HelloClass", anotherHelloClass)
+        .getCompiledClass();
+
+    assertThat(staticGetOn(aClass), is("static-a-class"));
+    assertThat(staticGetOn(anotherClass), is("static-other-class"));
+
+    assertThat(instanceGetOn(aClass), is("instance-a-class"));
+    assertThat(instanceGetOn(anotherClass), is("instance-other-class"));
+  }
+
   private Method instanceMethodFrom(Class claz, Object instance, String methodName) throws NoSuchMethodException {
     Method method = claz
         .getMethod(methodName);
@@ -86,13 +128,13 @@ public class CompileSingleFileTest {
     return method;
   }
 
-  private String invokeStaticGetterOn(Class claz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+  private String staticGetOn(Class claz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     Method method = claz.getMethod("get");
     method.setAccessible(true);
     return method.invoke(null).toString();
 
   }
-  private String invokeInstanceGetterOn(Class claz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+  private String instanceGetOn(Class claz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
     Object instance = claz.newInstance();
     return instanceMethodFrom(claz, instance, "getI").invoke(instance).toString();
 
