@@ -15,7 +15,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class WebCompiler {
   @RequestMapping(value = "/compile/hello-world", method = POST)
   public String getProblem(@RequestBody String src) throws Exception {
-    Class<?> compiledCode = InMemoryJavaCompiler.compile("HelloWorld", src);
+    Class<?> compiledCode = new InMemoryJavaCompiler().compile("HelloWorld", src).getCompiledClass();
     return invokeStatic(mainMethodFrom(compiledCode)) ;
   }
 

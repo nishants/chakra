@@ -3,33 +3,30 @@ package chakra.controller.compiler;
 import javax.tools.*;
 import java.util.Arrays;
 
-public class InMemoryJavaCompiler {
-  static JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
-  public static DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+public class InMemoryJavaCompiler implements Compiler {
+  private JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+  public DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-  public static Class<?> compile(String className, String sourceCodeInText) throws Exception {
-    SourceCode sourceCode = new SourceCode(className, sourceCodeInText);
-    Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(sourceCode);
-
-    CompiledCode codeToCompile = new CompiledCode(className);
+  public CompilationResult compile(String className, String sourceCodeInText) throws Exception {
 
     DynamicClassLoader cl = new DynamicClassLoader(ClassLoader.getSystemClassLoader());
 
     ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(
-        defaultFileManager(), 
-        codeToCompile,
+        defaultFileManager(),
+        new CompiledCode(className),
         cl
     );
 
-    JavaCompiler.CompilationTask task = javac.getTask(null, fileManager, null, null, null, compilationUnits);
+    JavaCompiler.CompilationTask task = javac.getTask(null, fileManager, null, null, null, Arrays.asList(new SourceCode(className, sourceCodeInText)));
+
     boolean result = task.call();
-    if(!result){
+    if (!result) {
       System.err.println(task.toString());
     }
-    return cl.loadClass(className);
+    return new CompilationResult(cl.loadClass(className), null);
   }
 
-  private static StandardJavaFileManager defaultFileManager() {
+  private StandardJavaFileManager defaultFileManager() {
     return javac.getStandardFileManager(diagnostics, null, null);
   }
 }

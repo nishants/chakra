@@ -35,6 +35,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -64,4 +70,16 @@
         </plugins>
     </build>
 
+    <!-- Extract into profiles.xml-->
+    <profiles>
+    <profile>
+        <id>development</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <lombok.accessors.fluent>true</lombok.accessors.fluent>
+        </properties>
+    </profile>
+    </profiles>
 </project>
