@@ -10,7 +10,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class CompilerTest {
+public class CompileSingleFileTest {
 
   private Compiler compiler;
   private static final String HelloClass =
@@ -44,7 +44,6 @@ public class CompilerTest {
 
   @Test
   public void shouldNotUpdateAlreadyLoadedClass() throws Exception {
-
     Class dynamicClass = compiler
         .compile("chakra.compiler.AClass", aDynmaicClass)
         .getCompiledClass();
