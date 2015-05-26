@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -80,7 +81,10 @@ public class CompilerTest {
   }
 
   private Method readInstanceMethodFrom(Class helloClass, Object o) throws NoSuchMethodException {
-    return instanceMethodFrom(helloClass, o, "instanceMethod");
+    Method method = helloClass
+        .getMethod("instanceMethod", Integer.class, List.class);
+    method.setAccessible(true);
+    return method;
   }
 
   private String invokeStaticGetterOn(Class claz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
