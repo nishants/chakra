@@ -1,6 +1,6 @@
 package chakra.controller;
 
-import chakra.controller.compiler.InMemoryJavaCompiler;
+import chakra.controller.compiler.Compiler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class WebCompiler {
   @RequestMapping(value = "/compile/hello-world", method = POST)
   public String getProblem(@RequestBody String src) throws Exception {
-    Class<?> compiledCode = new InMemoryJavaCompiler().compile("HelloWorld", src).getCompiledClass();
+    Class<?> compiledCode = Compiler.create().compile("HelloWorld", src).getCompiledClass();
+
     return invokeStatic(mainMethodFrom(compiledCode)) ;
   }
 

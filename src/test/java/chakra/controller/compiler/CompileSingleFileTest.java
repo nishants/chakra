@@ -39,7 +39,7 @@ public class CompileSingleFileTest {
 
   @Before
   public void setUp() throws Exception {
-    compiler = new InMemoryJavaCompiler();
+    compiler = Compiler.create();
   }
 
   @Test

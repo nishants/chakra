@@ -3,7 +3,7 @@ package chakra.controller.compiler;
 import javax.tools.*;
 import java.util.Arrays;
 
-public class InMemoryJavaCompiler implements Compiler {
+class InMemoryJavaCompiler extends Compiler {
   private JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
   public DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
