@@ -1,7 +1,7 @@
 package chakra.controller.compiler;
 
 public abstract class Compiler {
-  public abstract CompilationResult compile(String className, String sourceCodeInText) throws Exception;
+  public abstract CompilationResult compile(SourceCode...classes) throws Exception;
 
   public static Compiler create(){
     return new InMemoryJavaCompiler();

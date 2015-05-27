@@ -1,6 +1,7 @@
 package chakra.controller;
 
 import chakra.controller.compiler.Compiler;
+import chakra.controller.compiler.SourceCode;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class WebCompiler {
   @RequestMapping(value = "/compile/hello-world", method = POST)
-  public String getProblem(@RequestBody String src) throws Exception {
-    Class<?> compiledCode = Compiler.create().compile("HelloWorld", src).getCompiledClass();
+  public String getProblem(@RequestBody String classCode) throws Exception {
+    Class<?> compiledCode = Compiler.create().compile(new SourceCode("HelloWorld", classCode)).getCompiledClass();
 
     return invokeStatic(mainMethodFrom(compiledCode)) ;
   }

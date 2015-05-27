@@ -70,7 +70,7 @@ public class CompileSingleFileTest {
   @Test
   public void shouldNotUpdateAlreadyLoadedClass() throws Exception {
     Class dynamicClass = compiler
-        .compile("chakra.compiler.AClass", aDynmaicClass)
+        .compile(new SourceCode("chakra.compiler.AClass", aDynmaicClass))
         .getCompiledClass();
 
     String gotDynamicallyStatic   = staticGetOn(dynamicClass);
@@ -83,7 +83,7 @@ public class CompileSingleFileTest {
   @Test
   public void testCompileAClass() throws Exception {
     Class helloClass = compiler
-        .compile("HelloClass", HelloClass)
+        .compile(new SourceCode("HelloClass", HelloClass))
         .getCompiledClass();
 
     Method staticMethod = readStaticMethodFrom(helloClass);
@@ -100,11 +100,11 @@ public class CompileSingleFileTest {
   @Test
   public void compilersMustHaveIsolatedClassLoaders() throws Exception {
     Class aClass = compiler
-        .compile("a.b.HelloClass", aHelloClass)
+        .compile(new SourceCode("a.b.HelloClass", aHelloClass))
         .getCompiledClass();
 
     Class anotherClass = compiler
-        .compile("a.b.HelloClass", anotherHelloClass)
+        .compile(new SourceCode("a.b.HelloClass", anotherHelloClass))
         .getCompiledClass();
 
     assertThat(staticGetOn(aClass), is("static-a-class"));
