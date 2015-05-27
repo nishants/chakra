@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -21,7 +23,7 @@ import static org.junit.Assert.assertThat;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({"server.port=0"})
-public class CompilationTest {
+public class MainRunnerTest {
 
   @Value("${local.server.port}")
   private int port;
@@ -36,28 +38,18 @@ public class CompilationTest {
 
   @Test
   public void helloWorld(){
-    ResponseEntity<String> response = template.postForEntity(
-        url("compile/hello-world"),
-        print("Hello World!"),
-        String.class
+    ResponseEntity<Map> response = template.postForEntity(
+        url("runner/main"),
+        "{ \"content\" : \"i want this back\"}  ",
+        Map.class
     );
 
     assertThat(response.getStatusCode(), is(HttpStatus.OK));
-    assertThat(response.getBody(), is("Hello World! - main"));
-  }
-
-  private String compilationRequestFor(String mainClass) {
-    return "{content:{main: '<main-class-code>'}}".replace("<main-class-code>", mainClass);
+    assertThat(response.getBody().get("content").toString(), is("i want this back"));
   }
 
   private String url(String url) {
     return String.format("http://localhost:%d/%s/", port, url);
   }
 
-  private String print(String message){
-    return String.format(
-        "class HelloWorld {public static void main(String[] hh){System.out.println(%s);}}",
-        ('"' + message + '"')
-    );
-  }
 }
