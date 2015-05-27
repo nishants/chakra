@@ -17,7 +17,7 @@ public class RequestToRunMain {
 
   public static RequestToRunMain create(String mainClassFile, String...javaFiles){
     Map content = new HashMap();
-    content.put("mainClassName", mainClassFile);
+    content.put("mainClass", mainClassFile);
     content.put("classes", asList(javaFiles));
     return new RequestToRunMain(content);
   }

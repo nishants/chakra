@@ -1,6 +1,9 @@
 package chakra.web.request;
 
-public class RunMainRequest{
+import lombok.Data;
+
+@Data
+public class RunnableMain {
   private String mainClass;
   private String[] javaFiles;
 }
