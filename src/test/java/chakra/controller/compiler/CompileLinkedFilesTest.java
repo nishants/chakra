@@ -20,8 +20,8 @@ public class CompileLinkedFilesTest {
 
 
   private static final String BClassBody =
-      "    package a.b; import a.AClass; public class BClass{         " +
-      "        public String get(){return new AClass().get();}        " +
+      "    package a.b; import a.AClass; public class BClass extends AClass{         " +
+      "        @Override public String get(){return new a.AClass().get();}        " +
       "    }                                                           ";
 
   @Before
