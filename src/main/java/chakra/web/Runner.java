@@ -20,7 +20,7 @@ public class Runner {
   @RequestMapping(value = "/main", method = POST)
   public Data<ExecuteMainResult> runMainMethod(@RequestBody Data<ExecuteMainRequest> request) throws Exception {
     ExecuteMainRequest requestContent = request.getContent();
-    CompilationResult compilationResult = Compiler.create().compile(toSourceCode(requestContent.getJavaFiles()));
+    CompilationResult compilationResult = Compiler.create().compile(MainRunner.preprocess(toSourceCode(requestContent.getJavaFiles())));
     return response(MainRunner.run(requestContent.getMainClass(), compilationResult.getCompiledClasses()));
   }
 

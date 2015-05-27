@@ -17,9 +17,9 @@
 
       "response": {
         "content": {
-          "console": [],
-          "result" : "okay",
-          "error": []
+          "console": [""],
+          "error": [],
+          "result" : "okay"
         }
       }
     },
