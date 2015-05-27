@@ -13,10 +13,12 @@ public class ApiSpec {
   private final Object response;
   private final Object request;
   private final String name;
+  private final boolean skipped;
 
   public ApiSpec(Map contract) {
     this.request = contract.get("request");
     this.response = contract.get("response");
+    this.skipped =  contract.get("skipped") != null;
     this.name = contract.get("name").toString();
   }
 

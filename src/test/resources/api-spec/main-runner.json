@@ -26,6 +26,7 @@
     {
       "name": "Should return the text lines output on console",
       "url" :  "runner/main",
+      "skipped": true,
       "request": {
         "content": {
           "mainClass": "SimpleMain",
