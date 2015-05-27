@@ -12,9 +12,14 @@ public class SourceCode extends SimpleJavaFileObject {
     private final String classSourceCode;
 
     public SourceCode(String classFullName, String classSourceCode) throws Exception {
-        super(URI.create("string:///" + classFullName.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+        super(URI.create(filePathFor(classFullName)), Kind.SOURCE);
         this.classFullName = classFullName;
         this.classSourceCode = classSourceCode;
+    }
+
+    // TODO To compiler the public classes, why ?
+    private static String filePathFor(String classFullName) {
+        return classFullName.replace('.', '/') + Kind.SOURCE.extension;
     }
 
     public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
