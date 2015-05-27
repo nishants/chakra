@@ -22,6 +22,7 @@ public class SourceCode extends SimpleJavaFileObject {
         return classFullName.replace('.', '/') + Kind.SOURCE.extension;
     }
 
+    @Override
     public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
         return classSourceCode;
     }
