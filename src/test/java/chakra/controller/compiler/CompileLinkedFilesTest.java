@@ -3,6 +3,7 @@ package chakra.controller.compiler;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -13,11 +14,15 @@ public class CompileLinkedFilesTest {
   private Compiler compiler;
 
   private static final String AClassBody =
-      "    package a; public class AClass{}";
+          "    package a; public class AClass{                           " +
+          "        public String get(){return \"i am an AClass\";}       " +
+          "     }                                                        ";
 
 
   private static final String BClassBody =
-      "    package a.b; public class BClass{}";
+      "    package a.b; import a.AClass; public class BClass{         " +
+      "        public String get(){return new AClass().get();}        " +
+      "    }                                                           ";
 
   @Before
   public void setUp() throws Exception {
@@ -27,14 +32,27 @@ public class CompileLinkedFilesTest {
   @Test
   public void shouldCompileLinkedClasses() throws Exception {
 
-    List<Class> aClass = compiler
+    List<Class> compiledClasses = compiler
         .compile(
             new SourceCode("a.AClass", AClassBody),
             new SourceCode("a.b.BClass", BClassBody)
         ).getCompiledClasses();
 
-    assertThat(aClass.get(0).getName(), is("a.AClass"));
-    assertThat(aClass.get(1).getName(), is("a.b.BClass"));
+    Class aClass = compiledClasses.get(0);
+    Class bClass = compiledClasses.get(1);
+
+    assertThat(aClass.getName(), is("a.AClass"));
+    assertThat(bClass.getName(), is("a.b.BClass"));
+
+    assertThat(getFrom(anInstanceOf(bClass)), is("i am an AClass"));
+  }
+
+  private String getFrom(Object gettable) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    return gettable.getClass().getMethod("get").invoke(gettable).toString();
+  }
+
+  private Object anInstanceOf(Class claz) throws IllegalAccessException, InstantiationException {
+    return claz.newInstance();
   }
 
 }
