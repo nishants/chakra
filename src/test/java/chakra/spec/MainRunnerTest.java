@@ -31,7 +31,6 @@ public class MainRunnerTest {
   @Value("${local.server.port}")
   private int port;
 
-  private String base;
   private RestTemplate template;
   private final String specsJson = "/api-spec/main-runner.json";
   private List<ApiSpec> specs;
@@ -41,9 +40,6 @@ public class MainRunnerTest {
     template = new TestRestTemplate();
     specs = loadFrom(specsJson);
   }
-
-  public static final String SimpleMainClass =
-      "   public class SimpleMainClass{public static void main(String[] args){}}                                                ";
 
   @Test
   public void testMainSpecs() {
