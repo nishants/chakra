@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -34,18 +34,29 @@ public class MainRunnerTest {
   @Before
   public void setUp() throws Exception {
     template = new TestRestTemplate();
+
   }
 
+  public static final String SimpleMainClass =
+  "   public class SimpleMainClass{                    "+
+  "     public static void main(String[] args){        "+
+  "                                                    "+
+  "     }                                              "+
+  "   }                                                ";
+
   @Test
-  public void helloWorld(){
+  public void runmain(){
+    Map request = new HashMap();
+    request.put("content", "hello");
+
     ResponseEntity<Map> response = template.postForEntity(
         url("runner/main"),
-        "{ \"content\" : {\"mainClass\":\"a.B.HelloWord\" }}  ",
+        RequestToRunMain.create("SimpleMainClass", SimpleMainClass),
         Map.class
     );
 
     assertThat(response.getStatusCode(), is(HttpStatus.OK));
-    assertThat(response.getBody().get("content").toString(), is("{mainClass=a.B.HelloWord}"));
+    assertThat(response.getBody().get("content").toString(), is("SimpleMainClass"));
   }
 
   private String url(String url) {
