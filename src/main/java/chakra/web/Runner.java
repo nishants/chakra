@@ -1,10 +1,12 @@
 package chakra.web;
 
+import chakra.compiler.CompilationResult;
 import chakra.compiler.Compiler;
 import chakra.compiler.SourceCode;
+import chakra.runner.MainRunner;
 import chakra.web.request.ExecuteMainRequest;
 import chakra.web.request.JavaFile;
-import chakra.web.response.ExecuteMainResponse;
+import chakra.runner.ExecuteMainResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,13 +18,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/runner")
 public class Runner {
   @RequestMapping(value = "/main", method = POST)
-  public Data<ExecuteMainResponse> runMainMethod(@RequestBody Data<ExecuteMainRequest> request) throws Exception {
-    Compiler.create().compile(toSourceCode(request.getContent().getJavaFiles()));
-    return response(new ExecuteMainResponse(
-            new String[0],
-            new String[0],
-            "okay")
-    );
+  public Data<ExecuteMainResult> runMainMethod(@RequestBody Data<ExecuteMainRequest> request) throws Exception {
+    ExecuteMainRequest requestContent = request.getContent();
+    CompilationResult compilationResult = Compiler.create().compile(toSourceCode(requestContent.getJavaFiles()));
+    return response(MainRunner.run(requestContent.getMainClass(), compilationResult.getCompiledClasses()));
   }
 
   private SourceCode[] toSourceCode(JavaFile[] javaFiles) throws Exception {
