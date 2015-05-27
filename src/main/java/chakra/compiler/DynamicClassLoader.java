@@ -1,4 +1,4 @@
-package chakra.controller.compiler;
+package chakra.compiler;
 
 import java.util.HashMap;
 import java.util.List;

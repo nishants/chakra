@@ -1,4 +1,4 @@
-package chakra.controller.compiler;
+package chakra.compiler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

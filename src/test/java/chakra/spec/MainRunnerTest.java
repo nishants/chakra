@@ -40,12 +40,12 @@ public class MainRunnerTest {
   public void helloWorld(){
     ResponseEntity<Map> response = template.postForEntity(
         url("runner/main"),
-        "{ \"content\" : \"i want this back\"}  ",
+        "{ \"content\" : {\"mainClass\":\"a.B.HelloWord\" }}  ",
         Map.class
     );
 
     assertThat(response.getStatusCode(), is(HttpStatus.OK));
-    assertThat(response.getBody().get("content").toString(), is("i want this back"));
+    assertThat(response.getBody().get("content").toString(), is("{mainClass=a.B.HelloWord}"));
   }
 
   private String url(String url) {

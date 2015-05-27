@@ -1,4 +1,4 @@
-package chakra.controller.compiler;
+package chakra.compiler;
 
 import org.junit.Before;
 import org.junit.Test;

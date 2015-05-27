@@ -1,4 +1,4 @@
-package chakra.controller.compiler;
+package chakra.compiler;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
