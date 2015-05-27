@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -14,15 +13,8 @@ public class CompileLinkedFilesTest {
   private Compiler compiler;
 
   private static final String AClassBody =
-      "       package a.b;  " +
-          "       public class AClass {                " +
-          "         public static String get(){               " +
-          "           return \"static-a-class\";   " +
-          "         }                                  " +
-          "         public String getI(){\n"+
-          "           return \"dynamic-a-class\";"+
-          "         }                                         "+
-          "       }                                    ";
+      "    package a; public class AClass{}";
+
 
   private static final String BClassBody =
       "    package a.b; public class BClass{}";
@@ -34,12 +26,15 @@ public class CompileLinkedFilesTest {
 
   @Test
   public void shouldCompileLinkedClasses() throws Exception {
-    List<SourceCode> classes = asList();
 
-    Class aClass = compiler
-        .compile(new SourceCode("a.b.AClass", AClassBody)).getCompiledClasses().get(0);
+    List<Class> aClass = compiler
+        .compile(
+            new SourceCode("a.AClass", AClassBody),
+            new SourceCode("a.b.BClass", BClassBody)
+        ).getCompiledClasses();
 
-    assertThat(aClass.getName(), is("a.b.AClass"));
+    assertThat(aClass.get(0).getName(), is("a.AClass"));
+    assertThat(aClass.get(1).getName(), is("a.b.BClass"));
   }
 
 }
