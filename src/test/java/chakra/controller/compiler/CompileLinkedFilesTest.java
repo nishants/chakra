@@ -22,7 +22,6 @@ public class CompileLinkedFilesTest {
           "         public String getI(){\n"+
           "           return \"dynamic-a-class\";"+
           "         }                                         "+
-
           "       }                                    ";
 
   private static final String BClassBody =
@@ -38,9 +37,7 @@ public class CompileLinkedFilesTest {
     List<SourceCode> classes = asList();
 
     Class aClass = compiler
-        .compile(new SourceCode("a.b.AClass", AClassBody),
-            new SourceCode("a.b.BClass", BClassBody))
-        .getCompiledClass();
+        .compile(new SourceCode("a.b.AClass", AClassBody)).getCompiledClass();
   }
 
 }

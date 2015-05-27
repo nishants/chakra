@@ -13,7 +13,7 @@ class InMemoryJavaCompiler extends Compiler {
 
     ExtendedStandardJavaFileManager fileManager = new ExtendedStandardJavaFileManager(
         defaultFileManager(),
-        new CompiledCode(classes[0].getClassName()),
+        new CompiledCode(classes[0].getClassFullName()),
         cl
     );
 
@@ -23,7 +23,7 @@ class InMemoryJavaCompiler extends Compiler {
     if (!result) {
       System.err.println(task.toString());
     }
-    return new CompilationResult(cl.loadClass(classes[0].getClassName()), null);
+    return new CompilationResult(cl.loadClass(classes[0].getClassFullName()), null);
   }
 
   private StandardJavaFileManager defaultFileManager() {

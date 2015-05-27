@@ -8,16 +8,16 @@ import java.net.URI;
 
 public class SourceCode extends SimpleJavaFileObject {
     @Getter
-    private final String className;
-    private String contents = null;
+    private final String classFullName;
+    private final String classSourceCode;
 
-    public SourceCode(String className, String contents) throws Exception {
-        super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
-        this.className = className;
-        this.contents = contents;
+    public SourceCode(String classFullName, String classSourceCode) throws Exception {
+        super(URI.create("string:///" + classFullName.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+        this.classFullName = classFullName;
+        this.classSourceCode = classSourceCode;
     }
 
     public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
-        return contents;
+        return classSourceCode;
     }
 }
