@@ -61,6 +61,9 @@ public class CompileSingleFileTest {
   "       }                                    "
       ;
 
+  private static final String anInterface = "package a.b;  public interface AnInterface {void call();}";
+  private static final String anAbstractClass = "package a.b;  public abstract class AnAbstractClass {public abstract void call();}";
+
 
   @Before
   public void setUp() throws Exception {
@@ -112,6 +115,23 @@ public class CompileSingleFileTest {
 
     assertThat(instanceGetOn(aClass), is("instance-a-class"));
     assertThat(instanceGetOn(anotherClass), is("instance-other-class"));
+  }
+
+  @Test
+  public void shouldCompileAnInterface() throws Exception {
+    Class interfase = compiler
+        .compile(new SourceCode("a.b.AnInterface", anInterface))
+        .getCompiledClass();
+    assertThat(interfase.getTypeName(), is("a.b.AnInterface"));
+
+  }
+
+  @Test
+  public void shouldCompileAnAbstractClass() throws Exception {
+    Class interfase = compiler
+        .compile(new SourceCode("a.b.AnAbstractClass", anAbstractClass))
+        .getCompiledClass();
+    assertThat(interfase.getTypeName(), is("a.b.AnAbstractClass"));
   }
 
   private Method instanceMethodFrom(Class claz, Object instance, String methodName) throws NoSuchMethodException {
