@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-
 @RestController
 @RequestMapping("/runner")
 public class Runner {
