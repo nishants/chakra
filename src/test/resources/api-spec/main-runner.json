@@ -1,0 +1,49 @@
+{
+  "contracts": [
+    {
+      "name": "Single file, with main method, print nothing on console.",
+      "url" :  "runner/main",
+      "request": {
+        "content": {
+          "mainClass": "SimpleMain",
+          "javaFiles": [
+            {
+              "className" : "SimpleMain",
+              "javaCode"  : "public class SimpleMain{public static void main(String[] args){}}"
+            }
+          ]
+        }
+      },
+
+      "response": {
+        "content": {
+          "console": [],
+          "result" : "okay",
+          "error": []
+        }
+      }
+    },
+    {
+      "name": "Should return the text lines output on console",
+      "url" :  "runner/main",
+      "request": {
+        "content": {
+          "mainClass": "SimpleMain",
+          "javaFiles": [
+            {
+              "className" : "SimpleMain",
+              "javaCode"  : "public class SimpleMain{public static void main(String[] args){System.out.println(\"hello\");}}"
+            }
+          ]
+        }
+      },
+      "response": {
+        "content": {
+          "console": ["hello"],
+          "result" : "okay",
+          "error": []
+        }
+      }
+    }
+  ]
+}

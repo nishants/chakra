@@ -49,8 +49,8 @@ public class MainRunnerTest {
   public void testMainSpecs() {
     for (ApiSpec spec : specs) {
       ResponseEntity<Map> response = post(atUrl("runner/main"), spec.getRequest());
-      assertThat(response.getStatusCode(), is(HttpStatus.OK));
-      assertThat(response.getBody(), is(spec.getResponse()));
+      assertThat(spec.getName(), response.getStatusCode(), is(HttpStatus.OK));
+      assertThat(spec.getName(), response.getBody(), is(spec.getResponse()));
     }
   }
 

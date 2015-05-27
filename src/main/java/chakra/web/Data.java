@@ -1,9 +1,12 @@
 package chakra.web;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Represents a web request or response
+@AllArgsConstructor
+@NoArgsConstructor
 public class Data<T> {
   @Setter
   @Getter

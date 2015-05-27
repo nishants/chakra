@@ -14,8 +14,10 @@ public class DataTest {
 
   @Test
   public void shouldParseRequestContent() throws IOException {
-    Data deserialized = new ObjectMapper().readValue(requsetJson, Data.class);
-    assertThat(deserialized.getContent().toString(), is("hello"));
+    assertThat(read(requsetJson).getContent().toString(), is("hello"));
   }
 
+  private Data read(String requsetJson) throws IOException {
+    return new ObjectMapper().readValue(requsetJson, Data.class);
+  }
 }
