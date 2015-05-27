@@ -1,14 +1,14 @@
 package chakra.controller.compiler;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-@Ignore
 public class CompileLinkedFilesTest {
 
   private Compiler compiler;
@@ -37,7 +37,9 @@ public class CompileLinkedFilesTest {
     List<SourceCode> classes = asList();
 
     Class aClass = compiler
-        .compile(new SourceCode("a.b.AClass", AClassBody)).getCompiledClass();
+        .compile(new SourceCode("a.b.AClass", AClassBody)).getCompiledClasses().get(0);
+
+    assertThat(aClass.getName(), is("a.b.AClass"));
   }
 
 }

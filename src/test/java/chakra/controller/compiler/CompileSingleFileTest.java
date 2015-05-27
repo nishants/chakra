@@ -74,7 +74,7 @@ public class CompileSingleFileTest {
   public void shouldNotUpdateAlreadyLoadedClass() throws Exception {
     Class dynamicClass = compiler
         .compile(new SourceCode("chakra.compiler.AClass", aDynmaicClass))
-        .getCompiledClass();
+        .getCompiledClasses().get(0);
 
     String gotDynamicallyStatic   = staticGetOn(dynamicClass);
     String gotDynamicallyInstance = instanceGetOn(dynamicClass);
@@ -87,7 +87,7 @@ public class CompileSingleFileTest {
   public void testCompileAClass() throws Exception {
     Class helloClass = compiler
         .compile(new SourceCode("HelloClass", HelloClass))
-        .getCompiledClass();
+        .getCompiledClasses().get(0);
 
     Method staticMethod = readStaticMethodFrom(helloClass);
     Object instance = helloClass.newInstance();
@@ -104,11 +104,11 @@ public class CompileSingleFileTest {
   public void compilersMustHaveIsolatedClassLoaders() throws Exception {
     Class aClass = compiler
         .compile(new SourceCode("a.b.HelloClass", aHelloClass))
-        .getCompiledClass();
+        .getCompiledClasses().get(0);
 
     Class anotherClass = compiler
         .compile(new SourceCode("a.b.HelloClass", anotherHelloClass))
-        .getCompiledClass();
+        .getCompiledClasses().get(0);
 
     assertThat(staticGetOn(aClass), is("static-a-class"));
     assertThat(staticGetOn(anotherClass), is("static-other-class"));
@@ -121,17 +121,17 @@ public class CompileSingleFileTest {
   public void shouldCompileAnInterface() throws Exception {
     Class interfase = compiler
         .compile(new SourceCode("a.b.AnInterface", anInterface))
-        .getCompiledClass();
+        .getCompiledClasses().get(0);
     assertThat(interfase.getTypeName(), is("a.b.AnInterface"));
 
   }
 
   @Test
   public void shouldCompileAnAbstractClass() throws Exception {
-    Class interfase = compiler
+    Class abstractClass = compiler
         .compile(new SourceCode("a.b.AnAbstractClass", anAbstractClass))
-        .getCompiledClass();
-    assertThat(interfase.getTypeName(), is("a.b.AnAbstractClass"));
+        .getCompiledClasses().get(0);
+    assertThat(abstractClass.getTypeName(), is("a.b.AnAbstractClass"));
   }
 
   private Method instanceMethodFrom(Class claz, Object instance, String methodName) throws NoSuchMethodException {

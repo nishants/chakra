@@ -4,6 +4,8 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -28,11 +30,24 @@ class InMemoryJavaCompiler extends Compiler {
     if (!result) {
       System.err.println(task.toString());
     }
-    return new CompilationResult(classLoader.loadClass(classes[0].getClassFullName()), null);
+    return new CompilationResult(load(classes, classLoader), null);
   }
 
-  private CompiledCode compilationTargetFor(SourceCode[] aClass) throws Exception {
-    return new CompiledCode(aClass[0].getClassFullName());
+  private List<Class> load(SourceCode[] javaFiles, DynamicClassLoader classLoader) throws ClassNotFoundException {
+    List<Class> classes = new ArrayList<Class>();
+    for(SourceCode javaFile : javaFiles){
+      classes.add(classLoader.loadClass(javaFile.getClassFullName()));
+    }
+
+    return classes;
+  }
+
+  private List<CompiledCode> compilationTargetFor(SourceCode[] aClass) throws Exception {
+    List<CompiledCode> compiledCodeTarget = new ArrayList<CompiledCode>();
+    for(SourceCode c : aClass){
+      compiledCodeTarget.add(new CompiledCode(c.getClassFullName()));
+    }
+    return compiledCodeTarget;
   }
 
 }

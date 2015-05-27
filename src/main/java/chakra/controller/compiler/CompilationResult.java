@@ -3,9 +3,11 @@ package chakra.controller.compiler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class CompilationResult {
-  private Class compiledClass;
+  private List<Class> compiledClasses;
   private Object error;
 }

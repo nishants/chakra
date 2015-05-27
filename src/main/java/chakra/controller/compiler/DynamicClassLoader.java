@@ -1,6 +1,7 @@
 package chakra.controller.compiler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DynamicClassLoader extends ClassLoader {
@@ -11,9 +12,6 @@ public class DynamicClassLoader extends ClassLoader {
         super(parent);
     }
 
-    public void setCode(CompiledCode cc) {
-        customCompiledCode.put(cc.getName(), cc);
-    }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -23,5 +21,11 @@ public class DynamicClassLoader extends ClassLoader {
         }
         byte[] byteCode = cc.getByteCode();
         return defineClass(name, byteCode, 0, byteCode.length);
+    }
+
+    public void setComilationTarget(List<CompiledCode> compiledCode) {
+        for(CompiledCode code : compiledCode){
+            customCompiledCode.put(code.getName(), code);
+        }
     }
 }
