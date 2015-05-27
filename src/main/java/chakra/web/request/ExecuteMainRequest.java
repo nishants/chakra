@@ -3,7 +3,7 @@ package chakra.web.request;
 import lombok.Data;
 
 @Data
-public class RunnableMain {
+public class ExecuteMainRequest {
   private String mainClass;
-  private String[] javaFiles;
+  private JavaFile[] javaFiles;
 }

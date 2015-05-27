@@ -1,6 +1,7 @@
 package chakra.spec;
 
 import chakra.Application;
+import chakra.spec.support.ApiSpec;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,14 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static chakra.spec.support.ApiSpec.loadFrom;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -30,36 +33,36 @@ public class MainRunnerTest {
 
   private String base;
   private RestTemplate template;
+  private final String specsJson = "/api-spec/main-runner.json";
+  private List<ApiSpec> specs;
 
   @Before
   public void setUp() throws Exception {
     template = new TestRestTemplate();
-
+    specs = loadFrom(specsJson);
   }
 
   public static final String SimpleMainClass =
-  "   public class SimpleMainClass{                    "+
-  "     public static void main(String[] args){        "+
-  "                                                    "+
-  "     }                                              "+
-  "   }                                                ";
+      "   public class SimpleMainClass{public static void main(String[] args){}}                                                ";
 
   @Test
-  public void runmain(){
-    Map request = new HashMap();
-    request.put("content", "hello");
-
-    ResponseEntity<Map> response = template.postForEntity(
-        url("runner/main"),
-        RequestToRunMain.create("SimpleMainClass", SimpleMainClass),
-        Map.class
-    );
-
-    assertThat(response.getStatusCode(), is(HttpStatus.OK));
-    assertThat(response.getBody().get("content").toString(), is("SimpleMainClass"));
+  public void testMainSpecs() {
+    for (ApiSpec spec : specs) {
+      ResponseEntity<Map> response = post(atUrl("runner/main"), spec.getRequest());
+      assertThat(response.getStatusCode(), is(HttpStatus.OK));
+      assertThat(response.getBody(), is(spec.getResponse()));
+    }
   }
 
-  private String url(String url) {
+  private ResponseEntity<Map> post(String url, Object request) {
+    return template.postForEntity(
+        url,
+        request,
+        Map.class
+    );
+  }
+
+  private String atUrl(String url) {
     return String.format("http://localhost:%d/%s/", port, url);
   }
 

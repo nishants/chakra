@@ -1,4 +1,4 @@
-package chakra.spec;
+package chakra.spec.support;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
