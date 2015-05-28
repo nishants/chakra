@@ -1,27 +1,19 @@
 package chakra.runner;
 
-import chakra.web.request.JavaFile;
-
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 public class MainRunner {
-  public static JavaFile[] preprocess(JavaFile... javaFiles) {
-    for (JavaFile sourceCode : javaFiles) {
-      replaceSystemConsole(sourceCode);
-    }
-    return javaFiles;
-  }
+  // Synchronized for reporting the console output.
+  public static synchronized ExecuteMainResult run(String className, List<Class> classes) {
+    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+    ReadablePrintStream streamOut = new ReadablePrintStream(byteOut);
+    PrintStream defaultOut = System.out;
+    System.setOut(streamOut);
 
-  private static void replaceSystemConsole(JavaFile sourceCode) {
-    int console = SystemConsoles.getAConsole();
-    String newConsole = "chakra.runner.SystemConsoles.get(<console-id>)".replace("<console-id>", "" + console);
-    String filteredCode = sourceCode.getJavaCode().replaceAll("System.out", newConsole);
-    sourceCode.setJavaCode(filteredCode);
-  }
-
-  public static ExecuteMainResult run(String className, List<Class> classes) {
     try {
       executeMain(findClass(className, classes));
     } catch (NoSuchMethodException e) {
@@ -30,8 +22,13 @@ public class MainRunner {
       e.printStackTrace();
     } catch (InvocationTargetException e) {
       e.printStackTrace();
+    }finally {
+      System.setOut(defaultOut);
     }
-    return success(SystemConsoles.get(0).read(), new String[0]);
+
+    String[] consoleOutput = streamOut.read();
+
+    return success(consoleOutput, new String[0]);
   }
 
   private static void executeMain(Class mainClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
