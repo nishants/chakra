@@ -9,12 +9,12 @@ import java.util.List;
 
 public class ExtendedStandardJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
-  private List<CompiledCode> compiledCode;
+  private List<InMemoryClassFile> compiledCode;
   private DynamicClassLoader cl;
 
   protected ExtendedStandardJavaFileManager(
       JavaFileManager fileManager,
-      List<CompiledCode> compiledCode,
+      List<InMemoryClassFile> compiledCode,
       DynamicClassLoader cl) {
 
     super(fileManager);
@@ -30,7 +30,7 @@ public class ExtendedStandardJavaFileManager extends ForwardingJavaFileManager<J
       JavaFileObject.Kind kind,
       FileObject sibling) throws IOException {
 
-    for (CompiledCode compiledClass : compiledCode) {
+    for (InMemoryClassFile compiledClass : compiledCode) {
       if (compiledClass.getName().equals(className)) return compiledClass;
     }
 

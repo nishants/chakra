@@ -42,10 +42,10 @@ class InMemoryJavaCompiler extends Compiler {
     return classes;
   }
 
-  private List<CompiledCode> compilationTargetFor(InMemoryJavaFile[] aClass) throws Exception {
-    List<CompiledCode> compiledCodeTarget = new ArrayList<CompiledCode>();
+  private List<InMemoryClassFile> compilationTargetFor(InMemoryJavaFile[] aClass) throws Exception {
+    List<InMemoryClassFile> compiledCodeTarget = new ArrayList<InMemoryClassFile>();
     for(InMemoryJavaFile c : aClass){
-      compiledCodeTarget.add(new CompiledCode(c.getClassFullName()));
+      compiledCodeTarget.add(new InMemoryClassFile(c.getClassFullName()));
     }
     return compiledCodeTarget;
   }

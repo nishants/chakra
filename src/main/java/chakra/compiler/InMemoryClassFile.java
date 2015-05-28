@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
-public class CompiledCode extends SimpleJavaFileObject {
+public class InMemoryClassFile extends SimpleJavaFileObject {
     private ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-    public CompiledCode(String className) throws Exception {
+    public InMemoryClassFile(String className) throws Exception {
         super(new URI(className), Kind.CLASS);
     }
 

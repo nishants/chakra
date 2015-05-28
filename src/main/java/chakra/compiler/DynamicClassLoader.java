@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class DynamicClassLoader extends ClassLoader {
 
-    private Map<String, CompiledCode> customCompiledCode = new HashMap<String, CompiledCode>();
+    private Map<String, InMemoryClassFile> customCompiledCode = new HashMap<String, InMemoryClassFile>();
 
     public DynamicClassLoader(ClassLoader parent) {
         super(parent);
@@ -15,7 +15,7 @@ public class DynamicClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        CompiledCode cc = customCompiledCode.get(name);
+        InMemoryClassFile cc = customCompiledCode.get(name);
         if (cc == null) {
             return super.findClass(name);
         }
@@ -23,8 +23,8 @@ public class DynamicClassLoader extends ClassLoader {
         return defineClass(name, byteCode, 0, byteCode.length);
     }
 
-    public void setComilationTarget(List<CompiledCode> compiledCode) {
-        for(CompiledCode code : compiledCode){
+    public void setComilationTarget(List<InMemoryClassFile> compiledCode) {
+        for(InMemoryClassFile code : compiledCode){
             customCompiledCode.put(code.getName(), code);
         }
     }
