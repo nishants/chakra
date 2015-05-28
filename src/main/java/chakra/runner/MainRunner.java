@@ -34,7 +34,20 @@ public class MainRunner {
       main.invoke(null, (Object) null);
 
     } catch (Exception e) {
-      e.printStackTrace();
+      Throwable cause = e.getCause();
+
+      if (cause != null
+          && cause.getStackTrace() != null
+          && cause.getStackTrace().length != 0) {
+
+        StackTraceElement stackTraceElement = cause.getStackTrace()[0];
+        int lineNumber = stackTraceElement.getLineNumber();
+        String className = stackTraceElement.getClassName();
+        String methodName = stackTraceElement.getMethodName();
+        String errorMessage = "Exception at line: " + lineNumber + ", in " + className + "." + methodName + " : " + cause.getClass();
+        System.err.println(errorMessage);
+      }
+
     } finally {
       System.setOut(defaultOut);
       System.setErr(defaultErr);
