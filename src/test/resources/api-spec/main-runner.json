@@ -17,7 +17,7 @@
       "response": {
         "content": {
           "console": [""],
-          "error": [],
+          "error": [""],
           "result" : "okay"
         }
       }
@@ -39,7 +39,7 @@
         "content": {
           "console": ["hello"],
           "result" : "okay",
-          "error": []
+          "error": [""]
         }
       }
     }

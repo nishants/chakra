@@ -2,39 +2,44 @@ package chakra.runner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 public class MainRunner {
+
   // Synchronized for reporting the console output.
   public static synchronized ExecuteMainResult run(String className, List<Class> classes) {
-    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-    ReadablePrintStream streamOut = new ReadablePrintStream(byteOut);
-    PrintStream defaultOut = System.out;
-    System.setOut(streamOut);
+    ReadablePrintStream sysOut = new ReadablePrintStream(new ByteArrayOutputStream());
+    ReadablePrintStream sysErr = new ReadablePrintStream(new ByteArrayOutputStream());
 
-    try {
-      executeMain(findClass(className, classes));
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    }finally {
-      System.setOut(defaultOut);
-    }
+    executeMain(
+        sysOut,
+        sysErr,
+        findClass(className, classes)
+    );
 
-    String[] consoleOutput = streamOut.read();
-
-    return success(consoleOutput, new String[0]);
+    return success(sysOut.read(), sysErr.read());
   }
 
-  private static void executeMain(Class mainClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-    Method main = mainClass.getMethod("main", String[].class);
-    main.setAccessible(true);
-    main.invoke(null,(Object) null);
+  private static void executeMain(ReadablePrintStream sysOut, ReadablePrintStream sysErr, Class mainClass) {
+    PrintStream defaultOut = System.out;
+    PrintStream defaultErr = System.err;
+
+    System.setOut(sysOut);
+    System.setErr(sysErr);
+
+    try {
+      Method main = mainClass.getMethod("main", String[].class);
+      main.setAccessible(true);
+      main.invoke(null, (Object) null);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      System.setOut(defaultOut);
+      System.setErr(defaultErr);
+    }
+
   }
 
   private static ExecuteMainResult success(String[] read, String[] error) {
