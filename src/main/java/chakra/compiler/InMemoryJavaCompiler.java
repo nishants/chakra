@@ -13,7 +13,7 @@ class InMemoryJavaCompiler extends Compiler {
   private JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
   public DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-  public CompilationResult compile(SourceCode... classes) throws Exception {
+  public CompilationResult compile(InMemoryJavaFile... classes) throws Exception {
     DynamicClassLoader classLoader = new DynamicClassLoader(ClassLoader.getSystemClassLoader());
 
     ExtendedStandardJavaFileManager fileManager =
@@ -33,18 +33,18 @@ class InMemoryJavaCompiler extends Compiler {
     return new CompilationResult(load(classes, classLoader), null);
   }
 
-  private List<Class> load(SourceCode[] javaFiles, DynamicClassLoader classLoader) throws ClassNotFoundException {
+  private List<Class> load(InMemoryJavaFile[] javaFiles, DynamicClassLoader classLoader) throws ClassNotFoundException {
     List<Class> classes = new ArrayList<Class>();
-    for(SourceCode javaFile : javaFiles){
+    for(InMemoryJavaFile javaFile : javaFiles){
       classes.add(classLoader.loadClass(javaFile.getClassFullName()));
     }
 
     return classes;
   }
 
-  private List<CompiledCode> compilationTargetFor(SourceCode[] aClass) throws Exception {
+  private List<CompiledCode> compilationTargetFor(InMemoryJavaFile[] aClass) throws Exception {
     List<CompiledCode> compiledCodeTarget = new ArrayList<CompiledCode>();
-    for(SourceCode c : aClass){
+    for(InMemoryJavaFile c : aClass){
       compiledCodeTarget.add(new CompiledCode(c.getClassFullName()));
     }
     return compiledCodeTarget;

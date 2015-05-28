@@ -1,7 +1,7 @@
 package chakra.compiler;
 
 public abstract class Compiler {
-  public abstract CompilationResult compile(SourceCode...classes)
+  public abstract CompilationResult compile(InMemoryJavaFile...classes)
       throws Exception;
 
   public static Compiler create(){

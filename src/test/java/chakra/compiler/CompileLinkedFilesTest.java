@@ -34,8 +34,8 @@ public class CompileLinkedFilesTest {
 
     List<Class> compiledClasses = compiler
         .compile(
-            new SourceCode("a.AClass", AClassBody),
-            new SourceCode("a.b.BClass", BClassBody)
+            new InMemoryJavaFile("a.AClass", AClassBody),
+            new InMemoryJavaFile("a.b.BClass", BClassBody)
         ).getCompiledClasses();
 
     Class aClass = compiledClasses.get(0);

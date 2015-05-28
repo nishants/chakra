@@ -73,7 +73,7 @@ public class CompileSingleFileTest {
   @Test
   public void shouldNotUpdateAlreadyLoadedClass() throws Exception {
     Class dynamicClass = compiler
-        .compile(new SourceCode("chakra.compiler.AClass", aDynmaicClass))
+        .compile(new InMemoryJavaFile("chakra.compiler.AClass", aDynmaicClass))
         .getCompiledClasses().get(0);
 
     String gotDynamicallyStatic   = staticGetOn(dynamicClass);
@@ -86,7 +86,7 @@ public class CompileSingleFileTest {
   @Test
   public void testCompileAClass() throws Exception {
     Class helloClass = compiler
-        .compile(new SourceCode("HelloClass", HelloClass))
+        .compile(new InMemoryJavaFile("HelloClass", HelloClass))
         .getCompiledClasses().get(0);
 
     Method staticMethod = readStaticMethodFrom(helloClass);
@@ -103,11 +103,11 @@ public class CompileSingleFileTest {
   @Test
   public void compilersMustHaveIsolatedClassLoaders() throws Exception {
     Class aClass = compiler
-        .compile(new SourceCode("a.b.HelloClass", aHelloClass))
+        .compile(new InMemoryJavaFile("a.b.HelloClass", aHelloClass))
         .getCompiledClasses().get(0);
 
     Class anotherClass = compiler
-        .compile(new SourceCode("a.b.HelloClass", anotherHelloClass))
+        .compile(new InMemoryJavaFile("a.b.HelloClass", anotherHelloClass))
         .getCompiledClasses().get(0);
 
     assertThat(staticGetOn(aClass), is("static-a-class"));
@@ -120,7 +120,7 @@ public class CompileSingleFileTest {
   @Test
   public void shouldCompileAnInterface() throws Exception {
     Class interfase = compiler
-        .compile(new SourceCode("a.b.AnInterface", anInterface))
+        .compile(new InMemoryJavaFile("a.b.AnInterface", anInterface))
         .getCompiledClasses().get(0);
     assertThat(interfase.getTypeName(), is("a.b.AnInterface"));
 
@@ -129,7 +129,7 @@ public class CompileSingleFileTest {
   @Test
   public void shouldCompileAnAbstractClass() throws Exception {
     Class abstractClass = compiler
-        .compile(new SourceCode("a.b.AnAbstractClass", anAbstractClass))
+        .compile(new InMemoryJavaFile("a.b.AnAbstractClass", anAbstractClass))
         .getCompiledClasses().get(0);
     assertThat(abstractClass.getTypeName(), is("a.b.AnAbstractClass"));
   }

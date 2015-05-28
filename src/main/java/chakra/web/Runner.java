@@ -2,7 +2,7 @@ package chakra.web;
 
 import chakra.compiler.CompilationResult;
 import chakra.compiler.Compiler;
-import chakra.compiler.SourceCode;
+import chakra.compiler.InMemoryJavaFile;
 import chakra.runner.MainRunner;
 import chakra.web.request.ExecuteMainRequest;
 import chakra.web.request.JavaFile;
@@ -23,10 +23,10 @@ public class Runner {
     return response(MainRunner.run(requestContent.getMainClass(), compilationResult.getCompiledClasses()));
   }
 
-  private SourceCode[] toSourceCode(JavaFile[] javaFiles) throws Exception {
-    SourceCode[] sourceCode = new SourceCode[javaFiles.length];
+  private InMemoryJavaFile[] toSourceCode(JavaFile[] javaFiles) throws Exception {
+    InMemoryJavaFile[] sourceCode = new InMemoryJavaFile[javaFiles.length];
     for (int i = 0; i < javaFiles.length; i++) {
-      sourceCode[i] = new SourceCode(
+      sourceCode[i] = new InMemoryJavaFile(
           javaFiles[i].getClassName(),
           javaFiles[i].getJavaCode());
     }
