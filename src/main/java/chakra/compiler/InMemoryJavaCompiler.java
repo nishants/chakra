@@ -4,6 +4,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,16 +14,20 @@ class InMemoryJavaCompiler extends Compiler {
   private JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
   public DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-  public CompilationResult compile(InMemoryJavaFile... classes) throws Exception {
+  public CompilationResult compile(InMemoryJavaFile... classes) {
     DynamicClassLoader classLoader = new DynamicClassLoader(ClassLoader.getSystemClassLoader());
 
-    ExtendedStandardJavaFileManager fileManager =
+    ExtendedStandardJavaFileManager fileManager = null;
 
-        new ExtendedStandardJavaFileManager(
-            javac.getStandardFileManager(diagnostics, null, null),
-            compilationTargetFor(classes),
-            classLoader
-        );
+    try {
+      fileManager = new ExtendedStandardJavaFileManager(
+          javac.getStandardFileManager(diagnostics, null, null),
+          compilationTargetFor(classes),
+          classLoader
+      );
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
 
     JavaCompiler.CompilationTask task = javac.getTask(null, fileManager, null, null, null, asList(classes));
 
@@ -30,21 +35,32 @@ class InMemoryJavaCompiler extends Compiler {
     if (!result) {
       System.err.println(task.toString());
     }
-    return new CompilationResult(load(classes, classLoader), null);
+
+    List<Class> load = null;
+
+    try {
+      load = load(classes, classLoader);
+    }
+    catch (Throwable e) {
+      e.printStackTrace();
+      return new CompilationResult(new ArrayList<Class>(), e);
+    }
+
+    return new CompilationResult(load, null);
   }
 
   private List<Class> load(InMemoryJavaFile[] javaFiles, DynamicClassLoader classLoader) throws ClassNotFoundException {
     List<Class> classes = new ArrayList<Class>();
-    for(InMemoryJavaFile javaFile : javaFiles){
+    for (InMemoryJavaFile javaFile : javaFiles) {
       classes.add(classLoader.loadClass(javaFile.getClassFullName()));
     }
 
     return classes;
   }
 
-  private List<InMemoryClassFile> compilationTargetFor(InMemoryJavaFile[] aClass) throws Exception {
+  private List<InMemoryClassFile> compilationTargetFor(InMemoryJavaFile[] aClass) throws URISyntaxException {
     List<InMemoryClassFile> compiledCodeTarget = new ArrayList<InMemoryClassFile>();
-    for(InMemoryJavaFile c : aClass){
+    for (InMemoryJavaFile c : aClass) {
       compiledCodeTarget.add(new InMemoryClassFile(c.getClassFullName()));
     }
     return compiledCodeTarget;
