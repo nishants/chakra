@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DynamicClassLoader extends ClassLoader {
-
     private Map<String, InMemoryClassFile> customCompiledCode = new HashMap<String, InMemoryClassFile>();
 
     public DynamicClassLoader(ClassLoader parent) {
         super(parent);
     }
-
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {

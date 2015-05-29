@@ -32,20 +32,34 @@ public class MainRunnerTest {
   private int port;
 
   private RestTemplate template;
-  private final String specsJson = "/api-spec/main-runner.json";
-  private List<ApiSpec> specs;
+  private final String mainRunnerSpecsJson = "/api-spec/main-runner.json";
+  private final String testRunnerSpecsJson = "/api-spec/test-runner.json";
+  private List<ApiSpec> mainRunnerSpecs;
+  private List<ApiSpec> testRunnerSpecs;
 
   @Before
   public void setUp() throws Exception {
     template = new TestRestTemplate();
-    specs = loadFrom(specsJson);
+    mainRunnerSpecs = loadFrom(mainRunnerSpecsJson);
+    testRunnerSpecs = loadFrom(testRunnerSpecsJson);
   }
 
   @Test
   public void testMainSpecs() {
-    for (ApiSpec spec : specs) {
+    for (ApiSpec spec : mainRunnerSpecs) {
       if(!spec.isSkipped()){
         ResponseEntity<Map> response = post(atUrl("runner/main"), spec.getRequest());
+        assertThat(spec.getName(), response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(spec.getName(), response.getBody(), is(spec.getResponse()));
+      }
+    }
+  }
+
+  @Test
+  public void testRunnerSpecs() {
+    for (ApiSpec spec : testRunnerSpecs) {
+      if(!spec.isSkipped()){
+        ResponseEntity<Map> response = post(atUrl("runner/test"), spec.getRequest());
         assertThat(spec.getName(), response.getStatusCode(), is(HttpStatus.OK));
         assertThat(spec.getName(), response.getBody(), is(spec.getResponse()));
       }

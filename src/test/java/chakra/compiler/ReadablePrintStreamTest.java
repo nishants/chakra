@@ -1,5 +1,6 @@
 package chakra.compiler;
 
+import chakra.runner.ReadablePrintStream;
 import org.junit.Before;
 import org.junit.Test;
 

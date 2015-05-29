@@ -6,24 +6,24 @@
         "content": {
           "main": [
             {
-              "className": "a.test.ATestClass",
+              "className": "a.AClass",
               "javaCode": "package a;public class AClass {public int getOne() {return 1;}public int getTwo() {return 2;}}"
             }
           ],
           "test": [
             {
-              "className": "a.AClass",
-              "javaCode":  "package a.test; import org.junit.Test;import static org.hamcrest.CoreMatchers.is;import static org.junit.Assert.assertThat; public class ATestClass { @Test public void testMe() { assertThat(1, is(new a.AClass().getOne()));}@Test public void testMeAgain() {assertThat(1, is(new AClass().getTwo()));}}"
+              "className": "a.test.ATestClass",
+              "javaCode":  "package a.test; import a.AClass; import org.junit.Test;import static org.hamcrest.CoreMatchers.is;import static org.junit.Assert.assertThat; public class ATestClass { @Test public void testMe() { assertThat(1, is(new a.AClass().getOne()));}@Test public void testMeAgain() {assertThat(1, is(new AClass().getTwo()));}}"
             }
           ]
         }
       },
       "response": {
         "content": {
-          "result": [
+          "tests": [
             {
               "testClassName": "a.test.ATestClass",
-              "tests"        : [
+              "results"        : [
                 {
                   "name"  : "testMe",
                   "result": "success"
@@ -35,7 +35,7 @@
               ]
             }
           ],
-          "error": [""],
+          "error": [],
           "result": "okay"
         }
       }
