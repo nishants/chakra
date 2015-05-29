@@ -1,4 +1,5 @@
 {
+  "feature": "Run main method and return console output.",
   "contracts": [
     {
       "name": "Single file, with main method, print nothing on console.",

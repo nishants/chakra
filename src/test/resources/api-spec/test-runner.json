@@ -1,4 +1,5 @@
 {
+  "feature": "Run tests with JUnit-4.12 and Mockito-1.10",
   "contracts": [
     {
       "name": "Should runt test and return results.",
