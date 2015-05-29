@@ -10,14 +10,14 @@ import java.util.Map;
 
 @Getter
 public class Contract {
-  private final Object response;
+  private final Map response;
   private final Object request;
   private final String name;
   private final boolean skipped;
 
   public Contract(Map contract) {
     this.request = contract.get("request");
-    this.response = contract.get("response");
+    this.response = (Map)contract.get("response");
     this.skipped =  contract.get("skipped") != null;
     this.name = contract.get("name").toString();
   }

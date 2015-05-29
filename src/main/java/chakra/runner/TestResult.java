@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class TestResult {
   private String name;
   private String result;
+  private String message = "";
 }

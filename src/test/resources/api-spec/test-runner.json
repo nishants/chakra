@@ -26,12 +26,14 @@
               "testClassName": "a.test.ATestClass",
               "results"        : [
                 {
-                  "name"  : "testMe",
-                  "result": "success"
+                  "name"    : "testMe",
+                  "result"  : "success",
+                  "message" : ""
                 },
                 {
                   "name" : "testMeAgain",
-                  "result": "failed"
+                  "result": "failed",
+                  "message" : "AssertionError"
                 }
               ]
             }

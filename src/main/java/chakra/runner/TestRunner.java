@@ -17,6 +17,7 @@ public class TestRunner {
         new MockitoJUnitRunner(testClass).run(listener);
         result.getTests().add(new TestClassReport(testClass.getName(), listener.getTestResults()));
       } catch (InvocationTargetException e) {
+        //TODO return error to user
         e.printStackTrace();
       }
     }

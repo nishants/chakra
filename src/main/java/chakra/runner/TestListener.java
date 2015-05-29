@@ -22,14 +22,14 @@ public class TestListener extends RunNotifier {
 
   @Override
   public void fireTestFailure(Failure failure) {
-    testResults.add(new TestResult(currentTestName, "failed"));
+    testResults.add(new TestResult(currentTestName, "failed", failure.getTrace().split("at chakra\\.runner\\.TestRunner\\.run")[0]));
     currentTestName = null;
   }
 
   @Override
   public void fireTestFinished(final Description description) {
     if (currentTestName != null) {
-      testResults.add(new TestResult(currentTestName, "success"));
+      testResults.add(new TestResult(currentTestName, "success", ""));
     }
   }
 }

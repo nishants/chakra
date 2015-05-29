@@ -2,6 +2,7 @@ package chakra.spec;
 
 import chakra.Application;
 import chakra.spec.support.Contract;
+import chakra.spec.support.Response;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import static chakra.spec.support.Contract.loadFrom;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,9 +47,9 @@ public class Verifier {
   }
 
   @Test
-  public void testMainSpecs() {
+  public void verifyMainRunner() {
     for (Contract contract : mainRunnerContracts) {
-      if(!contract.isSkipped()){
+      if (!contract.isSkipped()) {
         ResponseEntity<Map> response = post(atUrl("runner/main"), contract.getRequest());
         assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
         assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
@@ -56,13 +58,25 @@ public class Verifier {
   }
 
   @Test
-  public void testRunnerSpecs() {
+  public void verifyTestRunner() {
     for (Contract contract : testRunnerContracts) {
-      if(!contract.isSkipped()){
+      if (!contract.isSkipped()) {
         ResponseEntity<Map> response = post(atUrl("runner/test"), contract.getRequest());
         assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
+        removeAndAssertErrorMessages(contract, response);
         assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
       }
+    }
+  }
+
+  private void removeAndAssertErrorMessages(Contract contract, ResponseEntity<Map> response) {
+    List<String> messagesInResponse = Response.popMessagesFrom(response.getBody());
+    List<String> messagesInContract = Response.popMessagesFrom(contract.getResponse());
+
+    for (int i = 0; i < messagesInContract.size(); i++) {
+      String actual = messagesInResponse.get(i);
+      String expected = messagesInContract.get(i);
+      assertThat(contract.getName(), actual.indexOf(expected) , is(not(-1)));
     }
   }
 
@@ -77,5 +91,4 @@ public class Verifier {
   private String atUrl(String url) {
     return String.format("http://localhost:%d/%s/", port, url);
   }
-
 }
