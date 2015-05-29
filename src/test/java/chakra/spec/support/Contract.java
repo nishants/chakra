@@ -9,32 +9,32 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class ApiSpec {
+public class Contract {
   private final Object response;
   private final Object request;
   private final String name;
   private final boolean skipped;
 
-  public ApiSpec(Map contract) {
+  public Contract(Map contract) {
     this.request = contract.get("request");
     this.response = contract.get("response");
     this.skipped =  contract.get("skipped") != null;
     this.name = contract.get("name").toString();
   }
 
-  public static List<ApiSpec> loadFrom(String jsonFilePath) throws IOException {
+  public static List<Contract> loadFrom(String jsonFilePath) throws IOException {
     return toSpecs((List<Map>) readFrom(jsonFilePath).get("contracts"));
   }
 
-  private static List<ApiSpec> toSpecs(List<Map> contracts) {
-    List<ApiSpec> specs = new ArrayList<ApiSpec>();
+  private static List<Contract> toSpecs(List<Map> contracts) {
+    List<Contract> specs = new ArrayList<Contract>();
     for (Map contract : contracts) {
-      specs.add(new ApiSpec(contract));
+      specs.add(new Contract(contract));
     }
     return specs;
   }
 
   private static Map readFrom(String resource) throws IOException {
-    return new ObjectMapper().readValue(ApiSpec.class.getResourceAsStream(resource), Map.class);
+    return new ObjectMapper().readValue(Contract.class.getResourceAsStream(resource), Map.class);
   }
 }

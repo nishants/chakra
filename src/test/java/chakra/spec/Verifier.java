@@ -1,7 +1,7 @@
 package chakra.spec;
 
 import chakra.Application;
-import chakra.spec.support.ApiSpec;
+import chakra.spec.support.Contract;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 
-import static chakra.spec.support.ApiSpec.loadFrom;
+import static chakra.spec.support.Contract.loadFrom;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest({"server.port=0"})
-public class MainRunnerTest {
+public class Verifier {
 
   @Value("${local.server.port}")
   private int port;
@@ -34,34 +34,34 @@ public class MainRunnerTest {
   private RestTemplate template;
   private final String mainRunnerSpecsJson = "/api-spec/main-runner.json";
   private final String testRunnerSpecsJson = "/api-spec/test-runner.json";
-  private List<ApiSpec> mainRunnerSpecs;
-  private List<ApiSpec> testRunnerSpecs;
+  private List<Contract> mainRunnerContracts;
+  private List<Contract> testRunnerContracts;
 
   @Before
   public void setUp() throws Exception {
     template = new TestRestTemplate();
-    mainRunnerSpecs = loadFrom(mainRunnerSpecsJson);
-    testRunnerSpecs = loadFrom(testRunnerSpecsJson);
+    mainRunnerContracts = loadFrom(mainRunnerSpecsJson);
+    testRunnerContracts = loadFrom(testRunnerSpecsJson);
   }
 
   @Test
   public void testMainSpecs() {
-    for (ApiSpec spec : mainRunnerSpecs) {
-      if(!spec.isSkipped()){
-        ResponseEntity<Map> response = post(atUrl("runner/main"), spec.getRequest());
-        assertThat(spec.getName(), response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(spec.getName(), response.getBody(), is(spec.getResponse()));
+    for (Contract contract : mainRunnerContracts) {
+      if(!contract.isSkipped()){
+        ResponseEntity<Map> response = post(atUrl("runner/main"), contract.getRequest());
+        assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
       }
     }
   }
 
   @Test
   public void testRunnerSpecs() {
-    for (ApiSpec spec : testRunnerSpecs) {
-      if(!spec.isSkipped()){
-        ResponseEntity<Map> response = post(atUrl("runner/test"), spec.getRequest());
-        assertThat(spec.getName(), response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(spec.getName(), response.getBody(), is(spec.getResponse()));
+    for (Contract contract : testRunnerContracts) {
+      if(!contract.isSkipped()){
+        ResponseEntity<Map> response = post(atUrl("runner/test"), contract.getRequest());
+        assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
       }
     }
   }
