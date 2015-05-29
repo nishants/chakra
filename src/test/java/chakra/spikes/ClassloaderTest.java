@@ -1,3 +1,5 @@
+package chakra.spikes;
+
 import chakra.compiler.*;
 import chakra.compiler.Compiler;
 import org.junit.Test;
@@ -18,13 +20,13 @@ public class ClassloaderTest {
   }
 
   public static String get(){
-    return "Hello     - ClassloaderTest";
+    return "Hello     - chakra.spikes.ClassloaderTest";
   }
 
   @Test
   public void classesFromChildClassLoaderMustBeAbleToPassSignalsToParentCllassloaderContext() throws Exception {
-    String rutimeClassSrc = "public class SimpleMain{public static void print(){ClassloaderTest.set(\"Hello     - SimpleMain\"); System.out.println(ClassloaderTest.get());}" +
-        "public static String get(){return ClassloaderTest.get();}"+
+    String rutimeClassSrc = "public class SimpleMain{public static void print(){chakra.spikes.ClassloaderTest.set(\"Hello     - SimpleMain\"); System.out.println(chakra.spikes.ClassloaderTest.get());}" +
+        "public static String get(){return chakra.spikes.ClassloaderTest.get();}"+
         "}";
 
     CompilationResult result = Compiler.create().compile(new InMemoryJavaFile("SimpleMain", rutimeClassSrc));
@@ -32,7 +34,7 @@ public class ClassloaderTest {
 
     invokeStaicMethod(runtimeClass, "print");
     assertThat(message, is("Hello     - SimpleMain"));
-    assertThat(getOn(runtimeClass.newInstance()), is("Hello     - ClassloaderTest"));
+    assertThat(getOn(runtimeClass.newInstance()), is("Hello     - chakra.spikes.ClassloaderTest"));
   }
 
   private String getOn(Object instance) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
