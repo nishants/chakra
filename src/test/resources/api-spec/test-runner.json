@@ -1,0 +1,44 @@
+{
+  "contracts": [
+    {
+      "name": "Should runt test and return results.",
+      "request": {
+        "content": {
+          "main": [
+            {
+              "className": "a.test.ATestClass",
+              "javaCode": "package a;public class AClass {public int getOne() {return 1;}public int getTwo() {return 2;}}"
+            }
+          ],
+          "test": [
+            {
+              "className": "a.AClass",
+              "javaCode":  "package a.test; import org.junit.Test;import static org.hamcrest.CoreMatchers.is;import static org.junit.Assert.assertThat; public class ATestClass { @Test public void testMe() { assertThat(1, is(new a.AClass().getOne()));}@Test public void testMeAgain() {assertThat(1, is(new AClass().getTwo()));}}"
+            }
+          ]
+        }
+      },
+      "response": {
+        "content": {
+          "result": [
+            {
+              "testClassName": "a.test.ATestClass",
+              "tests"        : [
+                {
+                  "name"  : "testMe",
+                  "result": "success"
+                },
+                {
+                  "name" : "testMeAgain",
+                  "result": "failed"
+                }
+              ]
+            }
+          ],
+          "error": [""],
+          "result": "okay"
+        }
+      }
+    }
+  ]
+}
