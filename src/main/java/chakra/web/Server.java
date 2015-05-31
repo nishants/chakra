@@ -10,20 +10,23 @@ import chakra.runner.TestRunner;
 import chakra.web.request.ExecuteMainRequest;
 import chakra.web.request.ExecuteTestsRequest;
 import chakra.web.request.JavaFile;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/runner")
 public class Server {
   @RequestMapping(value = "/main", method = POST)
-  public Data<ExecuteMainResult> runMainMethod(@RequestBody Data<ExecuteMainRequest> request) {
+  public ResponseEntity<Data<ExecuteMainResult>> runMainMethod(@RequestBody Data<ExecuteMainRequest> request) {
     ExecuteMainRequest requestContent = request.getContent();
     CompilationResult compilationResult = null;
     try {
@@ -31,11 +34,12 @@ public class Server {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
     return response(MainRunner.run(requestContent.getMainClass(), compilationResult.getCompiledClasses()));
   }
 
   @RequestMapping(value = "/test", method = POST)
-  public Data<ExecuteTestResult> runtTests(@RequestBody Data<ExecuteTestsRequest> request) {
+  public ResponseEntity<Data<ExecuteTestResult>> runtTests(@RequestBody Data<ExecuteTestsRequest> request) {
     ExecuteTestsRequest requestContent = request.getContent();
     List<JavaFile> filesToCompile = new ArrayList<JavaFile>();
     filesToCompile.addAll(requestContent.getMain());
@@ -61,7 +65,6 @@ public class Server {
         }
       }
     }
-
     return classes;
   }
 
@@ -75,7 +78,10 @@ public class Server {
     return sourceCode;
   }
 
-  private <T> Data<T> response(T okay) {
-    return new Data<T>(okay);
+  private <T> ResponseEntity<Data<T>> response(T okay) {
+    HashMap<String, String> headers = new HashMap<String, String>();
+    headers.put("Access-Control-Allow-Origin", "*");
+    Data<T> response = new Data<T>(okay);
+    return new ResponseEntity<Data<T>>(response, OK);
   }
 }

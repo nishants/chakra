@@ -14,7 +14,7 @@ class InMemoryJavaCompiler extends Compiler {
   private JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
   public DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-  public CompilationResult compile(InMemoryJavaFile... classes) {
+  public CompilationResult compile(InMemoryJavaFile... javaFiles) {
     DynamicClassLoader classLoader = new DynamicClassLoader(ClassLoader.getSystemClassLoader());
 
     ExtendedStandardJavaFileManager fileManager = null;
@@ -22,14 +22,14 @@ class InMemoryJavaCompiler extends Compiler {
     try {
       fileManager = new ExtendedStandardJavaFileManager(
           javac.getStandardFileManager(diagnostics, null, null),
-          compilationTargetFor(classes),
+          compilationTargetFor(javaFiles),
           classLoader
       );
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
 
-    JavaCompiler.CompilationTask task = javac.getTask(null, fileManager, null, null, null, asList(classes));
+    JavaCompiler.CompilationTask task = javac.getTask(null, fileManager, null, null, null, asList(javaFiles));
 
     boolean result = task.call();
     if (!result) {
@@ -39,7 +39,7 @@ class InMemoryJavaCompiler extends Compiler {
     List<Class> load = null;
 
     try {
-      load = load(classes, classLoader);
+      load = load(javaFiles, classLoader);
     }
     catch (Throwable e) {
       e.printStackTrace();
