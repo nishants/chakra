@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static chakra.spec.support.Contract.loadFrom;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -51,6 +52,7 @@ public class Verifier {
     for (Contract contract : mainRunnerContracts) {
       if (!contract.isSkipped()) {
         ResponseEntity<Map> response = post(atUrl("runner/main"), contract.getRequest());
+        assertThat(contract.getName(), response.getHeaders().get("Access-Control-Allow-Origin"), is(asList("*")));
         assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
         assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
       }
@@ -63,6 +65,7 @@ public class Verifier {
       if (!contract.isSkipped()) {
         ResponseEntity<Map> response = post(atUrl("runner/test"), contract.getRequest());
         assertThat(contract.getName(), response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(contract.getName(), response.getHeaders().get("Access-Control-Allow-Origin"), is(asList("*")));
         removeAndAssertErrorMessages(contract, response);
         assertThat(contract.getName(), response.getBody(), is(contract.getResponse()));
       }
