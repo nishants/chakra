@@ -15,7 +15,7 @@ public class DynamicClassLoader extends ClassLoader {
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         InMemoryClassFile cc = customCompiledCode.get(name);
         if (cc == null) {
-            return super.findClass(name);
+            return ClassLookup.getClass(name);
         }
         byte[] byteCode = cc.getByteCode();
         return defineClass(name, byteCode, 0, byteCode.length);
