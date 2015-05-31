@@ -47,11 +47,13 @@
             background-color: rgb(150, 176, 251);
         }
 
-        #tools-bar {
-            position: absolute;
-            bottom: 5vh;
+        .floating-tools-bar {
             right: 3vh;
             z-index: 5;
+            position: absolute;
+        }
+        #tools-bar {
+            bottom: 5vh;
         }
 
         #run-button {
@@ -79,16 +81,27 @@
             height: 100vh;
             width: 100vw;
         }
+        #console{
+            min-width: 300px;
+            top: 15vh;
+            height: 50vh;
+            overflow: scroll;
+            background-color: whitesmoke;
+        }
 
     </style>
 
 </head>
 <body>
 <div id="ide" class="full-screen">
-    <div id="tabs-bar">
+    <div id="console" class="floating-tools-bar">
+        out: our ocnolse output.
+    </div>
+
+    <div id="tabs-bar" >
         <button id="tab1" class="tab-name">Hello.java</button>
     </div>
-    <div id="tools-bar">
+    <div id="tools-bar" class="floating-tools-bar">
         <button id="run-button">Run</button>
         <button id="compile-button">Compile</button>
     </div>
@@ -124,10 +137,10 @@ public class HelloWorld {
             tabSize: 2,
             mode: "text/x-java"
         });
-                window.editor = editor;
+        window.editor = editor;
 
         var showConsole = function (response) {
-            console.log(JSON.stringify(response))
+            $("#console").html("out: " + response.content.console.join("<br>"));
         };
 
         var showError = function (response) {
