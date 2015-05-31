@@ -105,18 +105,9 @@ import java.util.List;
 
 public class HelloWorld {
   public static void main(String... args) throws IOException {
-    ClassLoader classLoader = ToolProvider.getSystemToolClassLoader();
-    Enumeration &lt;URL&gt; resources = classLoader.getResources("");
-        System.out.println(asList(resources));
-    }
+    System.out.println("hello");
+}
 
-    private static &lt;T&gt; List&lt;T&gt; asList(Enumeration&lt;T&gt; resources) {
-        List&lt;T&gt; result = new ArrayList&lt;T&gt;();
-        while (resources.hasMoreElements()) {
-            result.add(resources.nextElement());
-        }
-        return result;
-    }
 }
 
                 </textarea>
