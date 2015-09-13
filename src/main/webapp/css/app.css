@@ -1,0 +1,47 @@
+button{
+    width: 100px;
+    color: #716D6D;
+    height: 25px;
+    border-radius: 1px;
+    background-color: rgba(226, 223, 223, 0.72);
+    border-width: 1px;
+}
+
+#ide {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#action-buttons {
+    position: relative;
+    top: -30px;
+    z-index: 10;
+    left: -20px;
+}
+
+.bordered {
+    border: 1px solid #ECE7E7;
+}
+
+#console{
+    height: 100px;
+    overflow: scroll;
+    color: grey;
+}
+
+.bg-grey{
+    background-color: #EFEFEF;
+}
+
+.text-right-aligned{
+    text-align: right;
+}
+
+.CodeMirror-gutter{
+    background-color: #EFEFEF;
+}
+
+.grey-text{
+    color: #666666;
+}

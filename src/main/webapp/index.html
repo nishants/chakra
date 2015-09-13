@@ -4,178 +4,42 @@
     <meta charset="UTF-8">
     <title>Chakra</title>
 
+    <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="js/codemirror.css"/>
     <script src="js/codemirror.js"></script>
     <script src="mode/clike.js"></script>
     <script src="formatting.js"></script>
 
     <script src="js/lib/jquery.js"></script>
-    <style>
-        button {
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-        .tab-name-separator {
-            border-left: 1px solid #86A1EB
-        }
-
-        .CodeMirror {
-            height: 100vh;
-            width: 100vw;
-            background-color: rgba(57, 100, 224, 0.2) !important;
-        }
-
-        .CodeMirror-gutter {
-            background-color: rgba(57, 100, 224, 0.2) !important;
-
-        }
-
-        .CodeMirror div.CodeMirror-cursor {
-            -webkit-transition: 0.05s;
-            transition: 0.05s;
-            color: rgba(57, 100, 224, 1);
-        !important;
-        }
-
-        #tabbed-pane {
-            height: 80%;
-        }
-
-        #tabs-bar {
-            background-color: rgb(150, 176, 251);
-        }
-
-        .floating-tools-bar {
-            right: 3vh;
-            z-index: 5;
-            position: absolute;
-        }
-        #tools-bar {
-            bottom: 5vh;
-        }
-
-        #run-button {
-            padding: 5px;
-            background-color: rgba(57, 100, 224, 0.3);
-            width: 80px;
-        }
-
-        #compile-button {
-            padding: 5px;
-            padding-right: 15px;
-            color: rgba(57, 100, 224, 1);
-            background-color: rgba(57, 100, 224, 0.5);
-        }
-
-        .tab-name {
-            margin: 0;
-            padding: 0;
-            border: none;
-            background-color: transparent;
-            color: blueviolet;
-        }
-
-        .full-screen {
-            height: 100vh;
-            width: 100vw;
-        }
-        #console{
-            min-width: 300px;
-            top: 15vh;
-            height: 50vh;
-            overflow: scroll;
-            background-color: whitesmoke;
-        }
-
-    </style>
-
+    <script src="js/app.js"></script>
 </head>
 <body>
-<div id="ide" class="full-screen">
-    <div id="console" class="floating-tools-bar">
-        out: our ocnolse output.
-    </div>
-
-    <div id="tabs-bar" >
-        <button id="tab1" class="tab-name">Hello.java</button>
-    </div>
-    <div id="tools-bar" class="floating-tools-bar">
-        <button id="run-button">Run</button>
-        <button id="compile-button">Compile</button>
-    </div>
-    <div id="tabbed-pane">
-        <div id="tab-1">
-            <div class="tab-pane">
-                <textarea id="editor1" class="editor">
-import javax.tools.ToolProvider;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
+<div id="ide">
+    <div class="grey-text bg-grey">HelloWorld.java</div>
+    <div id="editor"
+         class="bordered">
+         <textarea id="editor1"
+                   class="editor">
 public class HelloWorld {
-  public static void main(String... args) throws IOException {
+  public static void main(String... args){
     System.out.println("hello");
+  }
 }
+        </textarea>
+    </div>
+    <div id="action-buttons"
+         class="text-right-aligned">
+        <button id="run-button"
+                class="grey-text">run</button>
+    </div>
+    <div id="console"
+         class="bordered">
+        <div class="text-right-aligned bg-grey">console</div>
+        <div id="console-output">
 
-}
-
-                </textarea>
-            </div>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        var editor = CodeMirror.fromTextArea(document.getElementById("editor1"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            tabSize: 2,
-            mode: "text/x-java"
-        });
-        window.editor = editor;
-
-        var showConsole = function (response) {
-            $("#console").html("out: " + response.content.console.join("<br>"));
-        };
-
-        var showError = function (response) {
-            console.log(JSON.stringify(response))
-        };
-
-        var compileAndRun = function (code, success, failure) {
-            var data =function(code){
-                var response = {
-                  content: {
-                      mainClass: "HelloWorld",
-                      javaFiles: [{className: "HelloWorld", javaCode: code}]
-                  }
-                };
-                return JSON.stringify(response);
-            };
-
-            $.ajax({
-                type: "POST",
-                contentType: "application/json;",
-                url: "/runner/main",
-                data: data(code),
-                success: success,
-                error: failure
-            });
-        };
-
-
-        $("#run-button").click(function () {
-            compileAndRun(editor.getValue().replace("\n", ""), showConsole, showError)
-        });
-
-    });
-
-
-</script>
 </body>
 </html>
