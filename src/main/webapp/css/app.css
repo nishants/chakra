@@ -33,6 +33,10 @@ body {
     color: grey;
 }
 
+#error-output{
+    color: darkred;
+}
+
 .bg-grey{
     background-color: #EFEFEF;
 }

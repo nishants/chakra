@@ -11,13 +11,23 @@ $(document).ready(function () {
         var loader = $("#loader");
         visible ? loader.show() : loader.hide();
     };
-    var showConsole = function (response) {
+
+    var showSuccess = function (response) {
         $("#console-output").html(response.content.console.join("<br>"));
-        showLoader(false);
-    };
+    }
 
     var showError = function (response) {
-        console.log(JSON.stringify(response))
+        $("#error-output").html(response.error);
+    };
+
+    var resetConsole = function () {
+        $("#console-output").html("");
+        $("#error-output").html("")
+    };
+
+    var showConsole = function (response) {
+        response.error ? showError(response) : showSuccess(response);
+        showLoader(false);
     };
 
     var compileAndRun = function (code, success, failure) {
@@ -44,6 +54,7 @@ $(document).ready(function () {
 
     $("#run-button").click(function () {
         showLoader(true);
+        resetConsole();
         compileAndRun(editor.getValue().replace("\n", ""), showConsole, showError)
     });
 
