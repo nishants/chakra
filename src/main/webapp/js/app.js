@@ -7,8 +7,13 @@ $(document).ready(function () {
     });
     window.editor = editor;
 
+    var showLoader = function(visible){
+        var loader = $("#loader");
+        visible ? loader.show() : loader.hide();
+    };
     var showConsole = function (response) {
         $("#console-output").html(response.content.console.join("<br>"));
+        showLoader(false);
     };
 
     var showError = function (response) {
@@ -38,7 +43,9 @@ $(document).ready(function () {
 
 
     $("#run-button").click(function () {
+        showLoader(true);
         compileAndRun(editor.getValue().replace("\n", ""), showConsole, showError)
     });
 
+    showLoader(false);
 });
