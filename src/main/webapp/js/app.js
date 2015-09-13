@@ -8,7 +8,7 @@ $(document).ready(function () {
     window.editor = editor;
 
     var showConsole = function (response) {
-        $("#console-output").html("out: " + response.content.console.join("<br>"));
+        $("#console-output").html(response.content.console.join("<br>"));
     };
 
     var showError = function (response) {
