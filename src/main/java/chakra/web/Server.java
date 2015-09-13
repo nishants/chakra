@@ -31,6 +31,9 @@ public class Server {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    if(compilationResult.getError() != null){
+      return error("Failed to compile");
+    }
     return response(MainRunner.run(requestContent.getMainClass(), compilationResult.getCompiledClasses()));
   }
 
@@ -75,7 +78,10 @@ public class Server {
     return sourceCode;
   }
 
+  private <T> Data<T> error(String error) {
+    return new Data<T>(null, error);
+  }
   private <T> Data<T> response(T okay) {
-    return new Data<T>(okay);
+    return new Data<T>(okay, null);
   }
 }

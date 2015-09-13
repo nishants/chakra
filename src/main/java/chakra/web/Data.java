@@ -7,8 +7,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class Data<T> {
-  @Setter
-  @Getter
   protected T content;
+  protected String error;
 }
